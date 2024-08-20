@@ -24,7 +24,7 @@ class WaterMark:
 
     def read_img(self, filename=None, img=None):
         if img is None:
-            # 从文件读入图片
+            # 파일에서 그림 읽기 从文件读入图片
             img = cv2.imread(filename, flags=cv2.IMREAD_UNCHANGED)
             assert img is not None, "image file '{filename}' not read".format(filename=filename)
 
@@ -37,7 +37,7 @@ class WaterMark:
             wm = cv2.imread(filename=wm_content, flags=cv2.IMREAD_GRAYSCALE)
             assert wm is not None, 'file "{filename}" not read'.format(filename=wm_content)
 
-            # 读入图片格式的水印，并转为一维 bit 格式，抛弃灰度级别
+            # 그림형식의 워터마크를 읽고 그레이스케일 수준을 버리고 1차원 bit 형식으로 변환합니다. 读入图片格式的水印，并转为一维 bit 格式，抛弃灰度级别
             self.wm_bit = wm.flatten() > 128
 
         elif mode == 'str':
@@ -48,7 +48,7 @@ class WaterMark:
 
         self.wm_size = self.wm_bit.size
 
-        # 水印加密:
+        # 워터마크 암호화 水印加密:
         np.random.RandomState(self.password_wm).shuffle(self.wm_bit)
 
         self.bwm_core.read_wm(self.wm_bit)
@@ -97,7 +97,7 @@ class WaterMark:
         # 解密：
         wm = self.extract_decrypt(wm_avg=wm_avg)
 
-        # 转化为指定格式：
+        # 지정한 형식으로 변환 转化为指定格式：
         if mode == 'img':
             wm = 255 * wm.reshape(wm_shape[0], wm_shape[1])
             cv2.imwrite(out_wm_name, wm)

@@ -4,7 +4,7 @@ import numpy as np
 import functools
 
 
-# 一个帮助缓存化加速的类，引入事实上的全局变量
+# 캐시 가속화를 돕는 클래스 一个帮助缓存化加速的类，引入事实上的全局变量
 class MyValues:
     def __init__(self):
         self.idx = 0
@@ -36,7 +36,7 @@ def match_template_by_scale(scale):
 
 def search_template(scale=(0.5, 2), search_num=200):
     image, template = my_value.image, my_value.template
-    # 局部暴力搜索算法，寻找最优的scale
+    # 국소검색 알고리즘, 최적의 scale 찾기 局部暴力搜索算法，寻找最优的scale
     tmp = []
     min_scale, max_scale = scale
 
@@ -65,14 +65,14 @@ def search_template(scale=(0.5, 2), search_num=200):
 
 def estimate_crop_parameters(original_file=None, template_file=None, ori_img=None, tem_img=None
                              , scale=(0.5, 2), search_num=200):
-    # 推测攻击后的图片，在原图片中的位置、大小
+    # 공격후 이미지,원본 이미지에서의 위치, 크기 추정 推测攻击后的图片，在原图片中的位置、大小
     if template_file:
         tem_img = cv2.imread(template_file, cv2.IMREAD_GRAYSCALE)  # template image
     if original_file:
         ori_img = cv2.imread(original_file, cv2.IMREAD_GRAYSCALE)  # image
 
     if scale[0] == scale[1] == 1:
-        # 不缩放
+        # 확대/축소 하지 않기 不缩放
         scale_infer = 1
         scores = cv2.matchTemplate(ori_img, tem_img, cv2.TM_CCOEFF_NORMED)
         ind = np.unravel_index(np.argmax(scores, axis=None), scores.shape)
